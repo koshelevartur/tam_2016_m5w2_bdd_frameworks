@@ -1,6 +1,7 @@
 package com.epam.shoppingcart.steps;
 
 import com.epam.framework.BaseTest;
+import com.epam.framework.CartState;
 import com.epam.pages.CartPage;
 import com.epam.pages.MainPage;
 import com.epam.pages.SearchResultsPage;
@@ -47,14 +48,16 @@ public class StepDefinitions extends BaseTest {
 
     @When("^I increase quantity of product by (\\d+)$")
     public void iIncreaseQuantityOfProductBy(int value) {
-        //#TODO Save current total sum
-        //#TODO Increase quantity
+        CartPage cartPage = new CartPage(driver);
+        CartState.getInstance().setTotalSum(cartPage.getTotalSum());
+        cartPage.changeQuantityBy(1);
     }
 
     @When("^I decrease quantity of product by (\\d+)$")
     public void iDecreaseQuantityOfProductBy(int value) {
-        //#TODO Save current total sum
-        //#TODO Decrease quantity
+        CartPage cartPage = new CartPage(driver);
+        CartState.getInstance().setTotalSum(cartPage.getTotalSum());
+        new CartPage(driver).changeQuantityBy(-1);
     }
 
     @Then("^Cart page should open$")
@@ -74,11 +77,11 @@ public class StepDefinitions extends BaseTest {
 
     @Then("^Cost should grow$")
     public void costShouldGrow() {
-        //Assert.assertTrue(new CartPage(driver).changingOfTotalSumAfterChanginQuantityByOne() > 0);
+        Assert.assertTrue(new CartPage(driver).getTotalSum() - CartState.getInstance().getTotalSum() > 0);
     }
 
     @Then("^Cost should fall$")
     public void costShouldFall() {
-        //Assert.assertTrue(new CartPage(driver).changingOfTotalSumAfterChanginQuantityByOne() < 0);
+        Assert.assertTrue(new CartPage(driver).getTotalSum() - CartState.getInstance().getTotalSum() < 0);
     }
 }

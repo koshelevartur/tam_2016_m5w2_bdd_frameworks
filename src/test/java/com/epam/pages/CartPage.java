@@ -1,10 +1,13 @@
 package com.epam.pages;
 
 import com.epam.framework.AbstractPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -22,14 +25,12 @@ public class CartPage extends AbstractPage {
     private WebElement productQuantityField;
     @FindBy(id = "asyncTotal")
     private WebElement totalSumField;
+    @FindBy(xpath = "//a[contains(@id,'ul_')]")
+    private WebElement refreshButton;
 
-    private float totalSum = 0;
-    private int productQuantity = 0;
 
     public CartPage(WebDriver driver) {
         super(driver);
-        setProductQuantity();
-        setTotalSum();
     }
 
     public CartPage openCartPage() {
@@ -53,39 +54,22 @@ public class CartPage extends AbstractPage {
     }
 
     public boolean productNameContains(String s) {
-        System.out.println("---------------------");
-        System.out.println(productName.getText());
-        System.out.println(s);
-        System.out.println("---------------------");
         return productName.getText().toLowerCase().contains(s.toLowerCase());
     }
 
-    public float changingOfTotalSumAfterChanginQuantityByOne() {
-        float totalSumBeforeChanging = totalSum;
-        changeQuantityBy(1);
-        float totalSumAfterChanging = totalSum;
-        return (totalSumAfterChanging - totalSumBeforeChanging);
-    }
-
-    private void changeQuantityBy(int additionalProducts) {
-        // #TODO Change Quantity Logic
+    public CartPage changeQuantityBy(int quantityDif) {
+        int newQuantity = Integer.parseInt(productQuantityField.getAttribute("value")) + quantityDif;
+        productQuantityField.sendKeys(String.valueOf(newQuantity));
+        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(refreshButton));
+        refreshButton.click();
+        return new CartPage(driver);
     }
 
     public int getCurrentProductQuantity() {
-        return productQuantity;
+        return Integer.parseInt(productQuantityField.getAttribute("value"));
     }
 
-    private void setTotalSum() {
-        if (totalSumField.isDisplayed()) {
-            totalSum = Float.parseFloat(totalSumField.getText());
-        }
+    public float getTotalSum() {
+        return Float.parseFloat(totalSumField.getText().replace(',', '.'));
     }
-
-    private void setProductQuantity() {
-        if(productQuantityField.isDisplayed()) {
-            productQuantity =  Integer.parseInt(productQuantityField.getAttribute("value"));
-        }
-    }
-
-
 }

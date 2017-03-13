@@ -38,3 +38,4 @@ Feature: Work with cart
     And Quantity of product is more then 1
     When I decrease quantity of product by 1
     Then Cost should fall
+    And I delete all products from cart
