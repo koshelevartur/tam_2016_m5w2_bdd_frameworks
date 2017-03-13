@@ -31,9 +31,9 @@ public class StepDefinitions extends BaseTest {
         Assert.assertFalse(new CartPage(driver).isCartEmpty());
     }
 
-    @And("^Quantity of product is more then 1$")
-    public void productQuantityMoreThenOne() {
-        Assert.assertTrue(new CartPage(driver).getCurrentProductQuantity() > 1);
+    @And("^Quantity of product is more then (\\d+)$")
+    public void productQuantityMoreThenOne(int value) {
+        Assert.assertTrue(new CartPage(driver).getCurrentProductQuantity() > value);
     }
 
     @When("^I add first product to the cart$")
@@ -50,14 +50,14 @@ public class StepDefinitions extends BaseTest {
     public void iIncreaseQuantityOfProductBy(int value) {
         CartPage cartPage = new CartPage(driver);
         CartState.getInstance().setTotalSum(cartPage.getTotalSum());
-        cartPage.changeQuantityBy(1);
+        cartPage.changeQuantityBy(value);
     }
 
     @When("^I decrease quantity of product by (\\d+)$")
     public void iDecreaseQuantityOfProductBy(int value) {
         CartPage cartPage = new CartPage(driver);
         CartState.getInstance().setTotalSum(cartPage.getTotalSum());
-        new CartPage(driver).changeQuantityBy(-1);
+        new CartPage(driver).changeQuantityBy(value * (-1));
     }
 
     @Then("^Cart page should open$")

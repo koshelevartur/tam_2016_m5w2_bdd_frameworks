@@ -1,8 +1,5 @@
 package com.epam.framework;
 
-import com.epam.pages.CartPage;
-import gherkin.lexer.Ca;
-
 /**
  * Created by Артур.
  */

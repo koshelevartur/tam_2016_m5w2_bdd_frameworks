@@ -1,7 +1,6 @@
 package com.epam.pages;
 
 import com.epam.framework.AbstractPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -59,6 +58,7 @@ public class CartPage extends AbstractPage {
 
     public CartPage changeQuantityBy(int quantityDif) {
         int newQuantity = Integer.parseInt(productQuantityField.getAttribute("value")) + quantityDif;
+        productQuantityField.clear();
         productQuantityField.sendKeys(String.valueOf(newQuantity));
         new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(refreshButton));
         refreshButton.click();
@@ -70,6 +70,6 @@ public class CartPage extends AbstractPage {
     }
 
     public float getTotalSum() {
-        return Float.parseFloat(totalSumField.getText().replace(',', '.'));
+        return Float.parseFloat(totalSumField.getText().replace(',', '.').replaceAll("[^\\d.]+|\\.(?!\\d)", ""));
     }
 }

@@ -1,6 +1,6 @@
 Feature: Work with cart
 
-  Scenario Outline: Cart Page Openes After Adding New Product
+  Scenario Outline: Cart Page Opens After Adding New Product
     Given I perform search of "<product>"
     When I add first product to the cart
     Then Cart page should open
